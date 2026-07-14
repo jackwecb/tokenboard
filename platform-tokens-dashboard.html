@@ -115,6 +115,7 @@
     .detail-live div { padding: 12px; border: 1px solid var(--line); border-radius: 11px; background: rgba(255,255,255,.025); }
     .detail-live span { display: block; color: var(--muted); font-size: 12px; margin-bottom: 6px; }
     .detail-live strong { font-size: 16px; }
+    .detail-live small { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; }
     .detail-section { margin-top: 18px; }
     .detail-section h3 { margin: 0 0 8px; font-size: 15px; color: var(--gold); }
     .detail-section p { margin: 0; color: #d5ddeb; line-height: 1.75; }
@@ -184,8 +185,8 @@
         <option value="SPECIAL">特殊交易平台</option>
       </select>
       <select id="levelFilter">
+        <option value="all" selected>全部名单（核心＋观察）</option>
         <option value="core">仅核心名单</option>
-        <option value="all">核心＋观察</option>
         <option value="watch">仅观察项目</option>
       </select>
       <select id="marketFilter">
@@ -196,7 +197,7 @@
       </select>
       <select id="sortFilter">
         <option value="marketCap">按市值排序</option>
-        <option value="score">按综合分排序</option>
+        <option value="score">按评分排序</option>
         <option value="volume">按24h成交量</option>
         <option value="fdv">按FDV排序</option>
         <option value="change">按24h涨跌</option>
@@ -218,9 +219,9 @@
             <th>24h</th>
             <th>流通市值</th>
             <th>24h成交量</th>
-            <th>FDV</th>
+            <th title="完全稀释估值：按全部代币供应量计算的理论市值">FDV</th>
             <th>ATH / 日期</th>
-            <th>距ATH</th>
+            <th title="当前价格相对历史最高价（ATH）的跌幅">距ATH</th>
             <th>ATL / 日期</th>
             <th>流通量</th>
             <th>总量 / 上限</th>
@@ -490,12 +491,14 @@
       els.detailBody.innerHTML = `
         <div class="detail-live">
           <div><span>实时价格</span><strong>${usd(row.currentPrice)}</strong></div>
+          <div><span>历史最高价（ATH）</span><strong>${usd(row.ath)}</strong><small>${dateOnly(row.athDate)}</small></div>
+          <div><span>历史最低价（ATL）</span><strong>${usd(row.atl)}</strong><small>${dateOnly(row.atlDate)}</small></div>
           <div><span>流通市值</span><strong>${usd(row.marketCap, true)}</strong></div>
           <div><span>流通率</span><strong>${circulation == null ? "—" : `${circulation.toFixed(2)}%`}</strong></div>
           <div><span>币安市场</span><strong>${row.binanceSpot && row.binanceFutures ? "现货 + 合约" : row.binanceSpot ? "仅现货" : row.binanceFutures ? "仅合约" : "—"}</strong></div>
           <div><span>24h成交量</span><strong>${usd(row.volume24h, true)}</strong></div>
-          <div><span>FDV</span><strong>${usd(row.fdv, true)}</strong></div>
-          <div><span>距ATH</span><strong class="negative">${drawdown == null ? "—" : `${drawdown.toFixed(1)}%`}</strong></div>
+          <div><span title="按全部代币供应量计算的理论市值">FDV（完全稀释估值）</span><strong>${usd(row.fdv, true)}</strong></div>
+          <div><span title="当前价格相对历史最高价的跌幅">距ATH</span><strong class="negative">${drawdown == null ? "—" : `${drawdown.toFixed(1)}%`}</strong></div>
           <div><span>综合分</span><strong>${scoreFor(row)} / 100</strong></div>
         </div>
         <div class="detail-section"><h3>近30天价格</h3><div id="detailChart" class="chart-shell"><span class="chart-note">正在加载价格曲线…</span></div></div>
