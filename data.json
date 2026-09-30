@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-29T20:46:38.856Z",
+  "generatedAt": "2026-09-30T00:26:48.607Z",
   "sources": {
     "market": "CoinGecko /coins/markets",
     "spot": "Binance /api/v3/exchangeInfo",
